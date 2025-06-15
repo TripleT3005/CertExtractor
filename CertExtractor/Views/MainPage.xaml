@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="CertExtractor.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:CertExtractor.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:viewmodels="using:CertExtractor.ViewModels"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Main Content Area -->
+        <Grid  Grid.Row="1"
+               RowSpacing="16"
+               Padding="24"
+               AllowDrop="True"
+               DragOver="DropArea_DragOver"
+               Drop="DropArea_Drop">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Border Background="Transparent"
+                    Grid.RowSpan="4"
+                    Grid.ColumnSpan="1"
+                    AllowDrop="True"
+                    DragOver="DropArea_DragOver"
+                    Drop="DropArea_Drop"/>
+
+            <!-- Output -->
+            <StackPanel Grid.Row="0" Spacing="8">
+                <TextBlock Text="1. Ausgabeverzeichnis" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="Ändern..." Command="{Binding SelectOutputDirectoryCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBooleanConverter}}"/>
+                    <TextBox Grid.Column="1" Text="{Binding OutputDirectory, Mode=OneWay}" IsReadOnly="True" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+
+            <!-- Input -->
+            <StackPanel Grid.Row="1" Spacing="8" Margin="0,24,0,0">
+                <TextBlock Text="2. Eingabe auswählen und Verarbeitung starten" Style="{StaticResource SubheaderTextBlockStyle}" />
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Content="Dateien auswählen..." Command="{Binding SelectFilesCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBooleanConverter}}"/>
+                    <Button Content="Ordner auswählen..." Command="{Binding SelectFolderCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBooleanConverter}}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Subfolder-Toggle, Drop-InfoBar -->
+            <StackPanel Grid.Row="2" Spacing="8">
+                <ToggleSwitch Header="Unterordner einbeziehen"
+                              IsOn="{Binding IncludeSubfolders, Mode=TwoWay}"
+                              IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBooleanConverter}}"/>
+
+                <InfoBar Title="Drag &amp; Drop"
+                         Message="Sie können Dateien und Ordner auch direkt hierher ziehen."
+                         Severity="Informational"
+                         IsOpen="True"
+                         IsClosable="False"/>
+                <TextBlock Text="3. Log / Status" Margin="0,24,0,0" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            </StackPanel>
+
+            <!-- Log View -->
+            <ListView Grid.Row="3"
+                      ItemsSource="{Binding LogMessages}"
+                      MinHeight="200"
+                      BorderThickness="1"
+                      BorderBrush="{ThemeResource SystemControlForegroundBaseMediumLowBrush}"
+                      CornerRadius="4"
+                      Padding="12,8"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Top"/>
+                        <Setter Property="MinHeight" Value="30"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" TextWrapping="Wrap" LineHeight="30"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+
+        <!-- Status Bar -->
+        <StackPanel Grid.Row="2" Margin="0,16,0,0" Spacing="8">
+            <ProgressBar Value="{Binding ProgressValue}" Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <TextBlock Text="{Binding StatusText}" HorizontalAlignment="Center" Foreground="{ThemeResource SystemControlPageTextBaseHighBrush}"/>
+        </StackPanel>
+    </Grid>
+</Page>

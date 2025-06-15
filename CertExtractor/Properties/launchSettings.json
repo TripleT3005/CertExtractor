@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CertExtractor (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "CertExtractor (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
