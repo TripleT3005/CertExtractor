@@ -4,6 +4,12 @@ on:
   release:
     types:
       - published
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Existing GitHub Release Tag to scan'
+        required: true
+        type: string
 
 jobs:
   virustotal_scan:
