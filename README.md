@@ -37,9 +37,17 @@ Just drag in a file or folder, and CertExtractor will find and save all embedded
 
 ---
 
+## 🛠️ Coming Soon
+
+- Add multi-language support (starting with English)
+- Review and improve current German UI texts
+
+---
+
 ## 🖼️ Screenshot
 
-
+![Darkmode](images/CertExtractor_Dark.png)
+![Lightmode](images/CertExtractor_Light.png)
 
 ---
 
